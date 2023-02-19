@@ -12,6 +12,8 @@
 
 <br />
 
+## Playground link
+[playground](https://yash-1511-ecosnap-ai-app-hzz1pr.streamlit.app/)
 # EcoSnap
 
 Ecosnap is a crowdsourcing platform that allows users to contribute to environmental monitoring by capturing and sharing images of visual pollution. Using advanced AI technology, Ecosnap automatically classifies these images to identify sources of pollution, such as litter, graffiti, or damaged infrastructure. The platform provides real-time monitoring and visual analytics to support environmental management and inform decision-making.

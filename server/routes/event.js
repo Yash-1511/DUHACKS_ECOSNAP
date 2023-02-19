@@ -66,5 +66,18 @@ router.post("/event/:id/image", auth,upload.single('image'), async (req, res) =>
     console.log(error);
   }
 });
-
+router.get("/listimages",auth,async (req,res)=>{
+  try{
+    const images = await Image.find({user:req.user._id});
+    console.log(images);
+    if(images.length < 0){
+      res.json({
+        messages: "no images uploaded"
+      })
+    }
+    res.json(images);
+  }catch(error){
+   res.send(error);
+  }
+})
 module.exports = router;

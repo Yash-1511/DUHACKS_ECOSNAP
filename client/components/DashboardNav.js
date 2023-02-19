@@ -216,33 +216,7 @@ function DashboardNav({hero}) {
             </h1>
           </div>
         </header>
-        <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            {isAuthenticated() ? (
-              <>
-                <div>
-                  <p>
-                    Welcome{" "}
-                    <Link
-                      href="/users/[user]"
-                      as={`/users/${authState.userInfo.username}`}
-                    >
-                      <button>
-                        {" "}
-                        <p>
-                          <span>{authState.userInfo.username}!</span>
-                        </p>{" "}
-                      </button>
-                    </Link>
-                  </p>
-                </div>
-                <button onClick={() => logout()}>log out</button>
-              </>
-            ) : (
-              <h1>please refresh the page</h1>
-            )}
-          </div>
-        </main>
+
       </div>
   );
 }

@@ -1,10 +1,48 @@
 import Layout from "@/layouts/Main";
 import DashboardNav from "@/components/DashboardNav";
-
+import { AuthContext } from "@/store/auth";
+import { useContext, useState, useEffect } from "react";
+import Link from "next/link";
+import { publicFetch } from "@/utils/fetcher";
 function index() {
+  const { isAuthenticated, authState } = useContext(AuthContext);
+  const [user, setUser] = useState();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data } = await publicFetch.get("/users");
+      setUser(data);
+    };
+    fetchUser();
+  },[]);
   return (
     <Layout title="Dashboard">
       <DashboardNav hero="Dashboard" />
+      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+        {isAuthenticated() ? (
+          <>
+            <div>
+              <h2 className="text-2xl">
+                Welcome{" "}
+                <Link
+                  href="/users/[user]"
+                  as={`/users/${authState.userInfo.username}`}
+                >
+                  <button>
+                    {" "}
+                    <p>
+                      <span className="text-indigo-700">
+                        {authState.userInfo.username}!
+                      </span>
+                    </p>{" "}
+                  </button>
+                </Link>
+              </h2>
+            </div>
+          </>
+        ) : (
+          <h1>please refresh the page</h1>
+        )}
+      </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 mb-6 p-4">
         <div class="card card-border">
           <div class="card-body">
@@ -12,7 +50,13 @@ function index() {
               <div class="flex items-center gap-4">
                 <span
                   class="avatar avatar-rounded !bg-indigo-600"
-                  style={{width: "55px", height: "55px" ,minWidth: "55px" ,lineHeight: "55px", fontSize: "27.5px"}}
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    minWidth: "55px",
+                    lineHeight: "55px",
+                    fontSize: "27.5px",
+                  }}
                 >
                   <span class="avatar-icon avatar-icon-55">
                     <svg
@@ -34,9 +78,9 @@ function index() {
                   </span>
                 </span>
                 <div>
-                  <span>Total Customers</span>
+                  <span>Total Uploads</span>
                   <h3>
-                    <span>2,420</span>
+                    <span>0</span>
                   </h3>
                 </div>
               </div>
@@ -58,7 +102,7 @@ function index() {
                     ></path>
                   </svg>
                 </span>
-                <span>17.2%</span>
+                <span>1%</span>
               </div>
             </div>
           </div>
@@ -69,7 +113,13 @@ function index() {
               <div class="flex items-center gap-4">
                 <span
                   class="avatar avatar-rounded !bg-blue-500"
-                  style={{width: "55px", height: "55px" ,minWidth: "55px" ,lineHeight: "55px", fontSize: "27.5px"}}
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    minWidth: "55px",
+                    lineHeight: "55px",
+                    fontSize: "27.5px",
+                  }}
                 >
                   <span class="avatar-icon avatar-icon-55">
                     <svg
@@ -91,9 +141,9 @@ function index() {
                   </span>
                 </span>
                 <div>
-                  <span>Active Customers</span>
+                  <span>Total Points</span>
                   <h3>
-                    <span>1,897</span>
+                    <span>0</span>
                   </h3>
                 </div>
               </div>
@@ -115,7 +165,7 @@ function index() {
                     ></path>
                   </svg>
                 </span>
-                <span>32.7%</span>
+                <span>10%</span>
               </div>
             </div>
           </div>
@@ -126,7 +176,13 @@ function index() {
               <div class="flex items-center gap-4">
                 <span
                   class="avatar avatar-rounded !bg-emerald-500"
-                  style={{width: "55px", height: "55px" ,minWidth: "55px" ,lineHeight: "55px", fontSize: "27.5px"}}
+                  style={{
+                    width: "55px",
+                    height: "55px",
+                    minWidth: "55px",
+                    lineHeight: "55px",
+                    fontSize: "27.5px",
+                  }}
                 >
                   <span class="avatar-icon avatar-icon-55">
                     <svg
@@ -148,9 +204,9 @@ function index() {
                   </span>
                 </span>
                 <div>
-                  <span>New Customers</span>
+                  <span>Current Streak</span>
                   <h3>
-                    <span>241</span>
+                    <span>0</span>
                   </h3>
                 </div>
               </div>
@@ -176,6 +232,53 @@ function index() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* users list  */}
+      <div>
+        <h1 className="text-3xl px-4 py-6 mb-3 font-medium tracking-tight text-gray-900">
+          Leaderboard
+        </h1>
+        <div class="relative overflow-x-auto shadow-lg sm:rounded-lg p-2">
+          <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3">
+                  Username
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  email
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Points
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  Highest Streak
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {user && (
+                <>
+                  {user?.map(({ username, email, points, id }) => (
+                    <tr class="bg-white border-b" key={id}>
+                      <th
+                        scope="row"
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        {username}
+                      </th>
+                      <td class="px-6 py-4">{email}</td>
+                      <td class="px-6 py-4">{points}</td>
+                      <td class="px-6 py-4">0</td>
+                      <td class="px-6 py-4"></td>
+                    </tr>
+                  ))}
+                </>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </Layout>
